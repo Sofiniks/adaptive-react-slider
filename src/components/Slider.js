@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState} from 'react'
+import React, { useContext, useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import SliderItem from './SliderItem'
 import SliderButton from './SliderButton'
@@ -39,17 +39,16 @@ const Slider = ({children}) => {
         activeItem,
         indicatorOptions,
         controlsOptions,
-        activeSlides
+        childCount,
+        sliderWidth
     } = state;
     
 
     const [windowWidth, windowHeight] = useWindowSize();
     const wrapperRef = useRef(null);
-    const transitionRef = useRef(null);
-    const [wrapperWidth, setWrapperWidth] = useState(0);
     const [wrapperHeight, setWrapperHeight] = useState(0);
     const [swipeOptions, setSwipeOptions] = useState( 
-        {dragging: false,
+        {
         touchObject: {
             startX: 0,
             startY: 0,
@@ -61,95 +60,28 @@ const Slider = ({children}) => {
 
 
     useEffect(() => {
-        setWrapperWidth(wrapperRef.current.getBoundingClientRect().width)
         setWrapperHeight(wrapperRef.current.getBoundingClientRect().height)
     }, [])
   
+    useEffect(() => {
+        console.log(wrapperRef.current.getBoundingClientRect().width)
+        dispatch({
+            type: 'handleWindowResize',
+            payload: { translateValue: activeItem * wrapperRef.current.getBoundingClientRect().width }
+        })
+        
+        
+    }, [windowHeight, windowWidth, wrapperRef, activeItem,  dispatch])
+
+    
     useEffect(() => {
         const {width} = wrapperRef.current.getBoundingClientRect();
         dispatch({
             type: 'setSliderWidth',
             payload: width
         })
-    },[wrapperRef, dispatch])
-
-
-    useEffect(() => {
-        dispatch({
-            type: 'handleWindowResize',
-            payload: { translateValue: activeItem * wrapperRef.current.getBoundingClientRect().width }
-        })
-    }, [wrapperRef, activeItem,  dispatch, windowHeight, windowWidth])
-
-
-    const setActiveSlides = useCallback(() => {
-        if(Array.isArray(children)) {
-            dispatch({
-                type: 'setActiveSlidesArray',
-                payload: children.slice(children.slice(0, activeItem + 3))
-            });
-            return
-        }
-
-        dispatch({
-            type: 'setActiveSlidesArray',
-            payload: [children]
-        })
-    }, [children, activeItem, dispatch])
-
-    useEffect(() => {
-        if(!children) {
-          return  
-        }
-        setActiveSlides();
-    }, [children, setActiveSlides])
-
-
-   
-    const slideTransition = () => {
-        let newActiveSlides = []
         
-        if(activeItem === children.length - 1){
-            newActiveSlides = [
-                children[children.length - 2],
-                children[children.length - 1],
-                children[0]
-            ]
-        }else if(activeItem === 0) {
-            newActiveSlides = [
-                children[children.length - 1],
-                children[0],
-                children[1]
-            ]
-        }else {
-            newActiveSlides = children.slice(activeItem - 1, activeItem + 2);
-        }
-
-        dispatch({
-            type: "triggerSlideTransition",
-            payload: {
-                activeSlides: newActiveSlides,
-                translateValue: wrapperRef.current.getBoundingClientRect().width,
-            }
-        })
-    }
-
-    
-    useEffect(() => {
-        transitionRef.current = slideTransition; 
-    })
-
-    useEffect(() => {
-        const fireTransition = () => {
-            transitionRef.current();
-           
-        }
-        const transitionEnd = window.addEventListener('transitionend', fireTransition);
-    
-        return () => {
-            window.removeEventListener('transitionend', transitionEnd)
-        }
-    }, [])
+    },[wrapperRef, dispatch, windowWidth])
 
     
 
@@ -195,7 +127,9 @@ const Slider = ({children}) => {
     const {touchObject} = swipeOptions;
     const direction = getSwipeDirection(touchObject.startX, curX, touchObject.startY, curY);
 
-    
+    if(direction !== 0) {
+        e.preventDefault();
+    }
 
     const swipeLength = Math.round(Math.sqrt((curX - touchObject.startX) ** 2))
 
@@ -238,7 +172,7 @@ const onSwipeEnd = () => {
 
 
     
-    let slidesArray = activeSlides.map((item, index) => {
+    const renderChildren = () => children.map((item, index) => {
         return (
             <SliderItem key={index} index={index}>
                 {item}
@@ -249,6 +183,7 @@ const onSwipeEnd = () => {
         return (
             <Wrapper ref={wrapperRef}>
                 <SliderWrapper
+                translateValue={translateValue}
                 width='100%'
                 >
                 <h2>You need to pass some slider elements</h2>
@@ -262,14 +197,14 @@ const onSwipeEnd = () => {
         <Wrapper ref={wrapperRef}>
             {controlsOptions.show && <SliderButton previous/>}
            <SliderWrapper 
-           width = {wrapperWidth * activeSlides.length}
+           width = {sliderWidth * childCount}
            height = {wrapperHeight}
            translateValue={translateValue}
             onTouchStart={onSwipeStart}
             onTouchMove={onSwipeMove}
             onTouchEnd={onSwipeEnd}
            >
-                {slidesArray}
+                {renderChildren()}
             </SliderWrapper> 
             {controlsOptions.show && <SliderButton/>}
             {indicatorOptions.show && <Indicators/>}

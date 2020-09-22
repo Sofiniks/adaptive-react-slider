@@ -28,10 +28,10 @@ const SliderProvider = ({
                         translateValue: state.activeItem * state.sliderWidth
                     }
                 }
-                
-                case 'setActiveSlidesArray': {
-                    return {...state, activeSlides: payload}
+                case 'setTranslateValue': {
+                    return {...state, translateValue: payload}
                 }
+        
                 case 'setNextSlide': {
                     return {
                         ...state,
@@ -53,13 +53,6 @@ const SliderProvider = ({
                 }
                 
             }
-            
-            case "triggerSlideTransition" : {
-                return {
-                    ...state,
-                    ...payload
-                }
-            }
             default: {
                     return {...state}
             }
@@ -73,7 +66,6 @@ const SliderProvider = ({
             sliderWidth: 0,
             itemFit, 
             contentCoversContainer,
-            activeSlides: [],
             indicatorOptions: {
                 ...defaultIndicatorOptions,
                 ...indicatorOptions
