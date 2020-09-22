@@ -1,6 +1,6 @@
 {
     "name": "adaptive-react-slider",
-    "version": "1.3.7",
+    "version": "1.4.0",
     "description": "React Adaptive Slider for npm",
     "main": "./lib/AdaptiveSlider.js",
     "license": "MIT",
