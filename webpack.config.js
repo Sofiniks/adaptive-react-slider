@@ -3,7 +3,7 @@ var path = require('path');
 module.exports = {
     mode: 'production',
     devtool: false,
-    entry: './src/AdaptiveSlider.jsx',
+    entry: './src/AdaptiveSlider.js',
     output: {
         path: path.resolve('lib'),
         filename: 'AdaptiveSlider.js',

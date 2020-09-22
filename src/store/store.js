@@ -9,7 +9,8 @@ const SliderProvider = ({
     contentCoversContainer = true,
     itemFit = 'cover', 
     indicatorOptions,
-    controlsOptions
+    controlsOptions,
+  
 }) => {
     const [state, dispatch] = useReducer(
         (state, {type, payload}) => {
@@ -27,19 +28,21 @@ const SliderProvider = ({
                         translateValue: state.activeItem * state.sliderWidth
                     }
                 }
+                
+                case 'setActiveSlidesArray': {
+                    return {...state, activeSlides: payload}
+                }
                 case 'setNextSlide': {
                     return {
                         ...state,
-                        translateValue: state.translateValue >= (state.sliderWidth * (state.childCount - 1)) ? 0 
-                        : state.translateValue + state.sliderWidth,
+                        translateValue: state.translateValue + state.sliderWidth,
                         activeItem: state.activeItem === childCount - 1 ? 0 : state.activeItem + 1
                     }
                 }
                 case 'setPrevSlide': {
                     return {
                         ...state,
-                        translateValue: state.translateValue <= 0 ? (state.sliderWidth * (state.childCount - 1))
-                        : state.translateValue - state.sliderWidth,
+                        translateValue: state.translateValue - state.sliderWidth,
                         activeItem: state.activeItem === 0 ? childCount - 1 : state.activeItem - 1
                     }
                 }
@@ -47,6 +50,14 @@ const SliderProvider = ({
                     return {
                         ...state,
                         ...payload
+                }
+                
+            }
+            
+            case "triggerSlideTransition" : {
+                return {
+                    ...state,
+                    ...payload
                 }
             }
             default: {
@@ -62,6 +73,7 @@ const SliderProvider = ({
             sliderWidth: 0,
             itemFit, 
             contentCoversContainer,
+            activeSlides: [],
             indicatorOptions: {
                 ...defaultIndicatorOptions,
                 ...indicatorOptions
@@ -70,6 +82,7 @@ const SliderProvider = ({
                 ...defaultControlsOptions,
                 ...controlsOptions
             }
+           
         }
     )
     

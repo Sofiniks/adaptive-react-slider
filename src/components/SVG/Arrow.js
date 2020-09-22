@@ -1,16 +1,17 @@
 import React from "react";
 
-const ArrowPrev = () => {
+const Arrow = () => {
   return (
     <svg
       data-testid="arrow-prev"
       role="img"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      width='60'
-      height='60'
+      width='40'
+      height='40'
       viewBox="0 0 80 80"
       aria-labelledby="previousChevronId previousChevronDescId"
+     
     >
       <title id="previousChevronId">Previous Item</title>
       <desc id="previousChevronDescId">
@@ -24,4 +25,4 @@ const ArrowPrev = () => {
   );
 };
 
-export default ArrowPrev;
+export default Arrow;

@@ -1,12 +1,12 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import ArrowPrev from './SVG/ArrowPrev'
-import ArrowNext from './SVG/ArrowNext'
+import Arrow from './SVG/Arrow'
 import {SliderContext} from '../store/store'
 
 const Button = styled.button`
     position: absolute;
     ${props => (props.previous ? "left: 10px" : "right: 10px")};
+    ${props => (props.previous ? "transform: rotate(0deg)" : "transform: rotate(180deg)")};
     z-index: 3;
     top: 50%;
     width: ${({options}) => options.width};
@@ -29,14 +29,14 @@ const SliderButton = ({previous}) => {
     const {controlsOptions} = state;
 
     const handleNext = () => {
-        console.log('click next')
+      
         dispatch({
             type: 'setNextSlide'
         })
     }
 
     const handlePrev = () => {
-        console.log('click prev')
+       
         dispatch({
             type: 'setPrevSlide'
         })
@@ -56,7 +56,7 @@ const SliderButton = ({previous}) => {
         onClick={handleClick}
         options={controlsOptions}
         >
-            {previous ? <ArrowPrev/> : <ArrowNext/>}
+            {previous ? <Arrow/> : <Arrow transform="rotate(180deg)"/>}
         </Button>
     )
 }
