@@ -64,7 +64,6 @@ const Slider = ({children}) => {
     }, [])
   
     useEffect(() => {
-        console.log(wrapperRef.current.getBoundingClientRect().width)
         dispatch({
             type: 'handleWindowResize',
             payload: { translateValue: activeItem * wrapperRef.current.getBoundingClientRect().width }
@@ -127,9 +126,6 @@ const Slider = ({children}) => {
     const {touchObject} = swipeOptions;
     const direction = getSwipeDirection(touchObject.startX, curX, touchObject.startY, curY);
 
-    if(direction !== 0) {
-        e.preventDefault();
-    }
 
     const swipeLength = Math.round(Math.sqrt((curX - touchObject.startX) ** 2))
 
