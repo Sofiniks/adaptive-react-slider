@@ -1,28 +1,25 @@
-import React from 'react';
-import Slider from './components/Slider'
-import {SliderProvider} from './store/store'
-
+import React from "react";
+import Slider from "./components/Slider";
+import { SliderProvider } from "./store/store";
 
 const AdaptiveSlider = ({
   children,
   contentCoversContainer,
   itemFit,
   indicatorOptions,
-  controlsOptions
+  controlsOptions,
 }) => {
   return (
     <SliderProvider
-    childCount={children ? children.length : 0}
-    contentCoversContainer={contentCoversContainer}
-    itemFit={itemFit}
-    indicatorOptions={indicatorOptions}
-    controlsOptions={controlsOptions}
+      childCount={children ? children.length : 0}
+      contentCoversContainer={contentCoversContainer}
+      itemFit={itemFit}
+      indicatorOptions={indicatorOptions}
+      controlsOptions={controlsOptions}
     >
-    <Slider>
-      {children}
-    </Slider>
-</SliderProvider>
+      <Slider>{children}</Slider>
+    </SliderProvider>
   );
-}
+};
 
 export default AdaptiveSlider;
