@@ -34,6 +34,15 @@ const SliderItem = ({ children, index }) => {
   const { state } = context;
   const { contentCoversContainer, itemFit, sliderWidth } = state;
 
+  const newObj = Object.fromEntries([
+    ...Object.entries(children.props),
+    ["draggable", "false"],
+  ]);
+  const newChildren = Object.fromEntries([
+    ...Object.entries(children),
+    ["props", newObj],
+  ]);
+
   return (
     <Item active={index}>
       <ChildWrapper
@@ -41,7 +50,7 @@ const SliderItem = ({ children, index }) => {
         itemFit={itemFit}
         width={sliderWidth}
       >
-        {children}
+        {newChildren}
       </ChildWrapper>
     </Item>
   );
